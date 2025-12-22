@@ -264,6 +264,28 @@
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         init();
+        // دالة لجلب شاشة الترحيب من ملف خارجي
+async function loadSplashScreen() {
+    try {
+        const response = await fetch('splash.html');
+        const html = await response.text();
+        document.getElementById('splash-placeholder').innerHTML = html;
+
+        // منطق الإخفاء بعد التحميل
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.display = 'none', 800);
+            }
+        }, 2500); // تظهر لمدة ثانيتين ونصف
+    } catch (error) {
+        console.error("خطأ في تحميل شاشة الترحيب:", error);
+    }
+}
+
+// تشغيل الدالة فوراً
+loadSplashScreen();
     </script>
 </body>
 </html>

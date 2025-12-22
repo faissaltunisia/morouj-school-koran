@@ -26,8 +26,7 @@
             background: var(--gold-gradient); color: #000; display: flex;
             align-items: center; justify-content: center; font-weight: 800;
             z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            gap: 10px; font-size: 1rem;
+            transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); gap: 10px;
         }
         #success-banner.show { top: 0; }
 
@@ -43,63 +42,56 @@
         .challenge-banner { 
             background: var(--primary); color: white; border-radius: 20px; padding: 20px; 
             margin-bottom: 25px; border: 2px solid var(--accent); display: flex; 
-            justify-content: space-between; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            justify-content: space-between; align-items: center;
         }
         
-        .sem-btn { background: #fff; border: 2px solid var(--accent); color: var(--accent); padding: 10px 25px; border-radius: 12px; font-weight: 800; cursor: pointer; }
-        .sem-btn.active { background: var(--gold-gradient); color: var(--primary); border: none; }
-
         .surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .surah-card { background: #fff; border: 1px solid #e2d1a3; border-radius: 20px; padding: 25px 10px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .surah-card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
-        /* مشغل الفيديو والعداد */
-        .player-modal { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; }
-        .progress-container { width: 100%; background: #222; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: var(--gold-gradient); transition: 0.3s; }
+        /* --- تحسين عرض الفيديو للحاسوب --- */
+        .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; flex-direction: column; }
+        #v-box { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        
+        /* تحديد عرض الفيديو على الشاشات الكبيرة */
+        #v-box video, #v-box iframe { 
+            width: 100%; height: auto; aspect-ratio: 16/9; max-width: 900px; /* لا يتجاوز 900 بكسل على الحاسوب */
+            border-radius: 15px; border: 2px solid var(--accent); box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .progress-container { width: 100%; max-width: 900px; margin: 10px auto; background: #222; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--gold-gradient); }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0 25px; border-top: 2px solid var(--accent); }
-        .nav-item { color: #888; border: none; background: none; font-size: 0.8rem; flex: 1; text-align: center; cursor: pointer; }
+        .nav-item { color: #888; border: none; background: none; font-size: 0.75rem; flex: 1; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--accent); }
 
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10001; padding: 20px; }
-        .modal-card { background: var(--primary); border: 2px solid var(--accent); border-radius: 25px; width: 100%; max-width: 400px; padding: 30px; text-align: center; color: #fff; }
-        .grade-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--accent); color: #fff; padding: 12px; border-radius: 12px; margin-bottom: 8px; width: 100%; cursor: pointer; font-weight: bold; }
+        .modal-card { background: var(--primary); border: 2px solid var(--accent); border-radius: 25px; width: 100%; max-width: 450px; padding: 30px; text-align: center; color: #fff; }
+        .grade-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--accent); color: #fff; padding: 12px; border-radius: 12px; margin-bottom: 8px; width: 100%; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="splash-placeholder"></div>
-
-    <div id="success-banner">
-        <span>🏆</span> مبارك! لقد تجاوزت تحدي اليوم بنجاح <span>✨</span>
-    </div>
+    <div id="success-banner"><span>🏆</span> مبارك! لقد تجاوزت تحدي اليوم بنجاح <span>✨</span></div>
 
     <header class="app-header">
         <div class="logo-box">
             <img src="https://raw.githubusercontent.com/faissaltunisia/student-grades/main/Screenshot%202025-12-16%20235912.png">
-            <div class="brand-text">
-                <h1>مُصحَف المُرُوج</h1>
-                <span id="grade-label" style="color:#fff; font-size:0.7rem; opacity:0.7;">الصف الخامس</span>
-            </div>
+            <div class="brand-text"><h1>مُصحَف المُرُوج</h1><span id="grade-label" style="color:#fff; font-size:0.7rem; opacity:0.7;">الصف الخامس</span></div>
         </div>
-        <button onclick="openModal('modal-grades')" style="background:var(--gold-gradient); border:none; padding:8px 15px; border-radius:10px; font-weight:900; font-size:0.7rem;">تغيير الصف</button>
+        <button onclick="openModal('modal-grades')" style="background:var(--gold-gradient); border:none; padding:8px 15px; border-radius:10px; font-weight:900;">الصفوف</button>
     </header>
 
     <main class="main-scroller">
         <div class="challenge-banner">
-            <div>
-                <small style="color:var(--accent)">تحدي اليوم العظيم ⚡</small>
-                <h2 id="ch-title" style="font-family:'Amiri'; font-size:1.6rem;">جاري التحميل...</h2>
-            </div>
-            <button onclick="startChallenge()" style="background:var(--gold-gradient); border:none; padding:12px 25px; border-radius:12px; font-weight:900; cursor:pointer;">ابدأ الآن</button>
+            <div><small style="color:var(--accent)">تحدي اليوم ⚡</small><h2 id="ch-title" style="font-family:'Amiri';">تحميل...</h2></div>
+            <button onclick="startChallenge()" style="background:var(--gold-gradient); border:none; padding:12px 25px; border-radius:12px; font-weight:900;">ابدأ</button>
         </div>
-
         <div style="display:flex; gap:10px; justify-content:center; margin-bottom:25px;">
-            <button id="s1" class="sem-btn active" onclick="setSem(1)">الفصل الأول</button>
-            <button id="s2" class="sem-btn" onclick="setSem(2)">الفصل الثاني</button>
+            <button id="s1" class="sem-btn active" onclick="setSem(1)" style="padding:10px 20px; border-radius:10px; cursor:pointer;">الفصل الأول</button>
+            <button id="s2" class="sem-btn" onclick="setSem(2)" style="padding:10px 20px; border-radius:10px; cursor:pointer;">الفصل الثاني</button>
         </div>
-
         <div id="surah-grid" class="surah-grid"></div>
     </main>
 
@@ -107,31 +99,30 @@
         <button class="nav-item active" onclick="location.reload()">🏠<br>الرئيسية</button>
         <button class="nav-item" onclick="openModal('modal-grades')">📚<br>الصفوف</button>
         <button class="nav-item" onclick="openPrize()">🎁<br>الجائزة</button>
+        <button class="nav-item" onclick="openModal('modal-about')">✨<br>عن المنصة</button>
     </nav>
 
-    <div id="modal-grades" class="modal">
+    <div id="modal-about" class="modal">
         <div class="modal-card">
-            <h2 style="color:var(--accent); margin-bottom:20px; font-family:'Amiri'">قائمة الصفوف</h2>
-            <div id="grades-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-            <button onclick="closeModal('modal-grades')" style="margin-top:20px; color:#aaa; background:none; border:none;">إغلاق</button>
+            <h2 style="color:var(--accent); font-family:'Amiri'; margin-bottom:15px;">منصة مدرسة المروج</h2>
+            <p style="line-height:1.6; font-size:0.9rem; margin-bottom:20px;">
+                مرحباً بكم في منصة "مصحف المروج"، منصة تفاعلية مخصصة لطلابنا لتسهيل تلاوة وحفظ القرآن الكريم بإشراف الأستاذ فيصل العريبي. تهدف المنصة إلى تحفيز الطلاب عبر نظام التحديات اليومية والجوائز الرقمية.
+            </p>
+            <button onclick="closeModal('modal-about')" class="grade-btn">إغلاق</button>
         </div>
     </div>
 
-    <div id="modal-prize" class="modal">
-        <div class="modal-card" id="prize-content"></div>
-    </div>
+    <div id="modal-grades" class="modal"><div class="modal-card"><h2>الصفوف</h2><div id="grades-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div><button onclick="closeModal('modal-grades')">إغلاق</button></div></div>
+    <div id="modal-prize" class="modal"><div class="modal-card" id="prize-content"></div></div>
 
     <div id="player-modal" class="player-modal">
-        <div style="padding:20px; display:flex; justify-content:space-between; align-items:center; background:var(--primary);">
+        <div style="padding:20px; display:flex; justify-content:space-between; align-items:center;">
             <h2 id="v-title" style="color:var(--accent); font-family:'Amiri'"></h2>
             <button onclick="closePlayer()" style="color:#fff; background:none; border:none; font-size:2rem;">✕</button>
         </div>
-        <div id="v-box" style="flex:1; display:flex; align-items:center; justify-content:center;"></div>
-        <div id="v-hud" style="padding:20px; background:var(--primary); display:none; border-top:1px solid #222;">
-            <div style="display:flex; justify-content:space-between; color:#fff; font-size:0.8rem;">
-                <span>مستوى الإنجاز</span>
-                <span id="pct">0%</span>
-            </div>
+        <div id="v-box"></div>
+        <div id="v-hud" style="padding:20px; display:none; text-align:center;">
+            <div style="width:100%; max-width:900px; margin:auto; display:flex; justify-content:space-between; color:#fff;"><span>الإنجاز</span><span id="pct">0%</span></div>
             <div class="progress-container"><div id="v-bar" class="progress-fill"></div></div>
         </div>
     </div>
@@ -144,26 +135,18 @@
         let surahs = [], grade = "الصف الخامس", sem = 1, todayS = null, isCh = false, hasWon = false, vInst = null;
         const gs = ["الصف الخامس", "الصف السادس", "الصف السابع", "الصف الثامن", "الصف التاسع", "الصف العاشر", "الصف الحادي عشر", "الصف الثاني عشر"];
 
-        // 1. تحميل شاشة الترحيب
-        async function loadSplash() {
+        async function init() {
             try {
                 const res = await fetch('splash.html');
                 if(res.ok) document.getElementById('splash-placeholder').innerHTML = await res.text();
-                setTimeout(() => {
-                    const s = document.getElementById('splash-screen');
-                    if(s){ s.style.opacity='0'; setTimeout(()=>s.style.display='none',800); }
-                }, 2500);
-            } catch(e) {}
-        }
-
-        // 2. تهيئة المنصة
-        async function init() {
-            loadSplash();
+                setTimeout(() => { const s = document.getElementById('splash-screen'); if(s){s.style.opacity='0'; setTimeout(()=>s.style.display='none',800)} }, 2500);
+            } catch(e){}
+            
             const { data } = await _sb.from('surahs').select('*');
             surahs = data || [];
             document.getElementById('grades-list').innerHTML = gs.map(g => `<button class="grade-btn" onclick="setGrade('${g}')">${g}</button>`).join('');
             refresh();
-            checkSavedWin();
+            if(localStorage.getItem('win_'+new Date().toDateString())) { hasWon=true; document.getElementById('success-banner').classList.add('show'); }
         }
 
         function setGrade(g) { grade = g; document.getElementById('grade-label').innerText = g; closeModal('modal-grades'); refresh(); }
@@ -171,68 +154,33 @@
 
         function refresh() {
             const list = surahs.filter(s => s.grade === grade && s.semester == sem);
-            document.getElementById('surah-grid').innerHTML = list.map(s => `
-                <div class="surah-card" onclick="play('${s.video_path}', '${s.title}', false)">
-                    <h3>${s.title}</h3>
-                </div>
-            `).join('');
+            document.getElementById('surah-grid').innerHTML = list.map(s => `<div class="surah-card" onclick="play('${s.video_path}', '${s.title}', false)"><h3>${s.title}</h3></div>`).join('');
             if(list.length) { todayS = list[new Date().getDate() % list.length]; document.getElementById('ch-title').innerText = todayS.title; }
         }
 
-        // 3. نظام التشغيل والتحدي
         function play(url, title, ch) {
-            isCh = ch;
-            document.getElementById('player-modal').style.display = 'flex';
+            isCh = ch; document.getElementById('player-modal').style.display = 'flex';
             document.getElementById('v-title').innerText = title;
             document.getElementById('v-hud').style.display = ch ? 'block' : 'none';
             const box = document.getElementById('v-box');
-            const cleanUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
-
             if(url.includes('youtube')) {
                 const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-                box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
+                box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
                 if(isCh) { let p=0; window.ytT = setInterval(()=>{ if(p<100){p++; updateUI(p)} }, 1000); }
             } else {
-                const v = document.createElement('video'); v.src = cleanUrl; v.controls = true; v.autoplay = true; v.playsInline = true; v.style.width="100%";
+                const v = document.createElement('video'); v.src = url; v.controls = true; v.autoplay = true; v.playsInline = true;
                 box.appendChild(v); vInst = v;
                 if(isCh) v.ontimeupdate = () => updateUI(Math.floor((v.currentTime/v.duration)*100));
             }
         }
 
         function updateUI(p) {
-            document.getElementById('pct').innerText = p + '%';
-            document.getElementById('v-bar').style.width = p + '%';
-            if(p >= 75 && isCh && !hasWon) {
-                hasWon = true;
-                document.getElementById('success-banner').classList.add('show');
-                localStorage.setItem('win_' + new Date().toDateString(), 'true');
-            }
+            document.getElementById('pct').innerText = p+'%'; document.getElementById('v-bar').style.width = p+'%';
+            if(p>=75 && isCh && !hasWon) { hasWon=true; document.getElementById('success-banner').classList.add('show'); localStorage.setItem('win_'+new Date().toDateString(), 'true'); }
         }
 
-        function closePlayer() {
-            if(vInst) { vInst.pause(); vInst.remove(); vInst=null; }
-            document.getElementById('v-box').innerHTML = "";
-            clearInterval(window.ytT);
-            document.getElementById('player-modal').style.display = 'none';
-        }
-
-        function openPrize() {
-            const content = document.getElementById('prize-content');
-            if(hasWon) {
-                content.innerHTML = `<h1 style="font-size:4rem;">🏆</h1><h2>أنت بطل حقيقي!</h2><p>لقد أتممت التحدي وفتحت وسام المروج.</p><button onclick="closeModal('modal-prize')" class="grade-btn" style="margin-top:20px">استلام</button>`;
-            } else {
-                content.innerHTML = `<h1 style="font-size:4rem; opacity:0.2;">🔒</h1><h2>الصندوق مقفل</h2><p>أكمل 75% من تحدي اليوم أولاً.</p><button onclick="closeModal('modal-prize')" class="grade-btn" style="margin-top:20px; background:#333;">سأفعل</button>`;
-            }
-            openModal('modal-prize');
-        }
-
-        function checkSavedWin() {
-            if(localStorage.getItem('win_' + new Date().toDateString())) {
-                hasWon = true;
-                document.getElementById('success-banner').classList.add('show');
-            }
-        }
-
+        function closePlayer() { if(vInst){vInst.pause(); vInst.remove(); vInst=null;} document.getElementById('v-box').innerHTML=""; clearInterval(window.ytT); document.getElementById('player-modal').style.display='none'; }
+        function openPrize() { const c = document.getElementById('prize-content'); if(hasWon) c.innerHTML=`<h1>🏆</h1><h2>بطل متميز!</h2><p>لقد فتحت جائزة اليوم.</p>`; else c.innerHTML=`<h1>🔒</h1><h2>مقفل</h2><p>أكمل التحدي أولاً.</p>`; openModal('modal-prize'); }
         function startChallenge() { if(todayS) play(todayS.video_path, todayS.title, true); }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#041a11">
-    <title>منصة مُصحَف المُرُوج الاحترافية</title>
+    <title>المنصة الرقمية لمدرسة المُرُوج </title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
@@ -97,7 +97,7 @@
         <div class="logo-box">
             <img src="https://raw.githubusercontent.com/faissaltunisia/student-grades/main/Screenshot%202025-12-16%20235912.png">
             <div class="brand-text">
-                <h1>مُصحَف المُرُوج</h1>
+                <h1>المنصة الرقمية لمدرسة المُرُوج</h1>
                 <span id="grade-display" style="color:#fff; opacity:0.7; font-size:0.8rem;">تحميل...</span>
             </div>
         </div>
@@ -114,8 +114,8 @@
         </div>
 
         <div class="sem-box">
-            <button id="sem1" class="sem-btn active" onclick="switchSem(1)">الفصل الأول</button>
-            <button id="sem2" class="sem-btn" onclick="switchSem(2)">الفصل الثاني</button>
+            <button id="sem1" class="sem-btn active" onclick="switchSem(1)">الفصل  الدراسي الأول</button>
+            <button id="sem2" class="sem-btn" onclick="switchSem(2)">الفصل الدراسي  الثاني</button>
         </div>
         <div id="surah-grid" class="surah-grid"></div>
     </main>
@@ -146,7 +146,7 @@
         </button>
         <button class="nav-item" onclick="openModal('modal-grades')">
             <i class="fa-solid fa-book"></i>
-            <span>السور</span>
+            <span>الصفوف</span>
         </button>
         <button class="nav-item" onclick="openPrize()">
             <div id="prize-notif" class="badge-count"></div>
@@ -166,8 +166,8 @@
     </div></div>
 
     <div id="modal-about" class="modal"><div class="modal-card">
-        <h2 style="color:var(--accent); font-family:'Amiri';">مُصحَف المُرُوج</h2>
-        <p style="margin:20px 0; line-height:1.6;">منصة تعليمية متطورة لتسهيل تلاوة القرآن الكريم لطلاب مدرسة المروج.</p>
+        <h2 style="color:var(--accent); font-family:'Amiri';">المنصة الرقمية لمدرسة المُرُوج</h2>
+        <p style="margin:20px 0; line-height:1.6;">منصة تعليمية رقمية تابعة لمدرسة المروج للتعليم الأساسي بمحافظة ظفار. تهدف المنصة إلى تسخير التقنيات الحديثة لخدمة القرآن الكريم، من خلال توفير بيئة تفاعلية تساعد الطلاب على إتقان التلاوة والحفظ وفق المنهج الدراسي لوزارة التربية والتعليم بسلطنة عمان تحت اشراف الاستاذة أميرة سعيد الشنفري.  منصة تصميم أ. فيصل العريبي.</p>
         <button class="grade-btn" onclick="closeModal('modal-about')">شكراً لكم</button>
     </div></div>
 

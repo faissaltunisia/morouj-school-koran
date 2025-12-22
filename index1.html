@@ -17,7 +17,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--gold-light); font-family: 'Tajawal', sans-serif; height: 100vh; overflow: hidden; }
 
-        /* شريط النجاح العلوي */
+        /* شريط النجاح */
         #success-banner { position: fixed; top: -75px; left: 0; width: 100%; height: 60px; background: var(--gold-gradient); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; z-index: 9999; transition: 0.6s; gap: 10px; }
         #success-banner.show { top: 0; }
 
@@ -28,55 +28,34 @@
         .main-scroller { height: calc(100vh - 140px); overflow-y: auto; padding: 20px; }
         .challenge-banner { background: var(--primary); color: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 2px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- الحل النهائي لمشغل الفيديو (الحاسوب والهاتف) --- */
-        .player-modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
-            z-index: 10000; display: none; flex-direction: column; 
-        }
+        /* --- تحجيم المشغل للحاسوب --- */
+        .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* حاوية الفيديو الرئيسية */
-        .player-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        /* صندوق الفيديو المقيد (للحاسوب) */
         .video-fixed-box {
-            width: 100%;
-            max-width: 900px; /* عرض مناسب للحاسوب */
-            max-height: 70vh; /* ارتفاع يضمن ظهور الأزرار */
+            width: 95%; 
+            max-width: 700px; /* تصغير العرض للحاسوب */
+            max-height: 60vh; /* تصغير الارتفاع للحاسوب */
             background: #000;
-            border-radius: 12px;
+            border-radius: 15px;
             border: 2px solid var(--accent);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
 
-        /* تنسيق الفيديو/اليوتيوب ليكون ظاهراً بالكامل */
-        #v-box iframe, #v-box video {
-            width: 100%;
-            height: 100%;
-            max-height: 70vh;
-            aspect-ratio: 16/9;
-            object-fit: contain; /* يضمن عدم قص أي جزء من الفيديو */
-            display: block;
-        }
+        #v-box { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; }
+        #v-box iframe, #v-box video { width: 100%; height: 100%; aspect-ratio: 16/9; display: block; }
 
-        .close-btn { color: #fff; background: none; border: none; font-size: 2.5rem; cursor: pointer; padding: 10px; align-self: flex-end; }
+        .close-btn { position: absolute; top: -45px; right: 0; color: #fff; background: none; border: none; font-size: 2.5rem; cursor: pointer; }
 
-        /* باقي العناصر */
+        /* باقي التصميمات */
         .surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
         .surah-card { background: #fff; border: 1px solid #e2d1a3; border-radius: 15px; padding: 20px 10px; text-align: center; cursor: pointer; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 10px 0 25px; border-top: 2px solid var(--accent); }
         .nav-item { color: #888; border: none; background: none; font-size: 0.7rem; flex: 1; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--accent); }
-        .progress-bar-container { width: 100%; background: #222; height: 10px; margin-top: 10px; border-radius: 5px; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: var(--gold-gradient); transition: 0.3s; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10001; }
         .modal-card { background: var(--primary); border: 2px solid var(--accent); border-radius: 20px; width: 90%; max-width: 400px; padding: 25px; text-align: center; color: #fff; }
         .grade-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--accent); color: #fff; padding: 12px; border-radius: 10px; width: 100%; margin-bottom: 8px; cursor: pointer; }
@@ -100,22 +79,18 @@
             <div><small style="color:var(--accent)">تحدي اليوم ⚡</small><h2 id="ch-title" style="font-family:'Amiri';">تحميل...</h2></div>
             <button onclick="startChallenge()" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:10px; font-weight:900;">ابدأ</button>
         </div>
-        <div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
-            <button class="grade-btn" style="width:auto; padding:8px 20px;" onclick="setSem(1)">الفصل 1</button>
-            <button class="grade-btn" style="width:auto; padding:8px 20px;" onclick="setSem(2)">الفصل 2</button>
-        </div>
         <div id="surah-grid" class="surah-grid"></div>
     </main>
 
     <div id="player-modal" class="player-modal">
-        <button class="close-btn" onclick="closePlayer()">✕</button>
-        <div class="player-container">
-            <div class="video-fixed-box">
-                <div id="v-header" style="padding:10px; background:var(--primary); color:var(--accent); text-align:center; font-family:'Amiri'; border-bottom:1px solid #222;"></div>
-                <div id="v-box"></div>
-                <div id="v-hud" style="display:none; padding:10px; background:var(--primary);">
-                    <div style="display:flex; justify-content:space-between; color:#fff; font-size:0.8rem;"><span>إنجاز التحدي</span><span id="pct">0%</span></div>
-                    <div class="progress-bar-container"><div id="v-bar" class="progress-fill"></div></div>
+        <div class="video-fixed-box">
+            <button class="close-btn" onclick="closePlayer()">✕</button>
+            <div id="v-header" style="padding:8px; background:var(--primary); color:var(--accent); text-align:center; font-family:'Amiri'; font-size:1rem;"></div>
+            <div id="v-box"></div>
+            <div id="v-hud" style="display:none; padding:10px; background:var(--primary); border-top:1px solid #222;">
+                <div style="display:flex; justify-content:space-between; color:#fff; font-size:0.7rem;"><span>الإنجاز</span><span id="pct">0%</span></div>
+                <div style="width:100%; background:#222; height:8px; margin-top:5px; border-radius:4px; overflow:hidden;">
+                    <div id="v-bar" style="width:0%; height:100%; background:var(--gold-gradient); transition:0.3s;"></div>
                 </div>
             </div>
         </div>
@@ -128,13 +103,13 @@
         <button class="nav-item" onclick="openModal('modal-about')">✨<br>المنصة</button>
     </nav>
 
-    <div id="modal-about" class="modal"><div class="modal-card"><h2>مُصحَف المُرُوج</h2><p style="margin:15px 0; font-size:0.9rem;">منصة تلاوة تفاعلية بإشراف الأستاذ فيصل العريبي.</p><button onclick="closeModal('modal-about')" class="grade-btn" style="background:var(--gold-gradient); color:#000;">حسناً</button></div></div>
-    <div id="modal-grades" class="modal"><div class="modal-card"><h3>الصفوف</h3><div id="grades-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;"></div><button onclick="closeModal('modal-grades')" style="margin-top:15px; color:#aaa; background:none; border:none;">إغلاق</button></div></div>
+    <div id="modal-about" class="modal"><div class="modal-card"><h2>مُصحَف المُرُوج</h2><p style="margin:15px 0;">منصة تلاوة تفاعلية بإشراف الأستاذ فيصل العريبي.</p><button onclick="closeModal('modal-about')" class="grade-btn" style="background:var(--gold-gradient); color:#000;">حسناً</button></div></div>
+    <div id="modal-grades" class="modal"><div class="modal-card"><h3>الصفوف</h3><div id="grades-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;"></div><button onclick="closeModal('modal-grades')" style="margin-top:10px; color:#aaa; background:none; border:none;">إغلاق</button></div></div>
     <div id="modal-prize" class="modal"><div class="modal-card" id="prize-content"></div></div>
 
     <script>
         const SB_URL = 'https://vchzkeebmjqiohgoknnm.supabase.co';
-        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHprZWVibWpxaW9oZ29rbm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxMzU3MjgsImV4cCI6MjA4MTcxMTcyOH0.bDIOdzhpj5)M_5Hx7_SdnaBulImmFG41OKIOQGnx7FHI';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHprZWVibWpxaW9oZ29rbm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxMzU3MjgsImV4cCI6MjA4MTcxMTcyOH0.bDIOdzhpj5M_5Hx7_SdnaBulImmFG41OKIOQGnx7FHI';
         const _sb = supabase.createClient(SB_URL, SB_KEY);
         let surahs = [], grade = "الصف الخامس", sem = 1, todayS = null, isCh = false, hasWon = false, vInst = null;
         const gs = ["الصف الخامس", "الصف السادس", "الصف السابع", "الصف الثامن", "الصف التاسع", "الصف العاشر", "الصف الحادي عشر", "الصف الثاني عشر"];
@@ -147,7 +122,6 @@
         }
 
         function setGrade(g) { grade = g; document.getElementById('grade-label').innerText = g; closeModal('modal-grades'); refresh(); }
-        function setSem(s) { sem = s; refresh(); }
         function refresh() {
             const list = surahs.filter(s => s.grade === grade && s.semester == sem);
             document.getElementById('surah-grid').innerHTML = list.map(s => `<div class="surah-card" onclick="play('${s.video_path}', '${s.title}', false)"><h3>${s.title}</h3></div>`).join('');
@@ -162,7 +136,7 @@
             const box = document.getElementById('v-box'); box.innerHTML = "";
             if(url.includes('youtube')) {
                 const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-                box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0&showinfo=0" allow="autoplay; fullscreen" frameborder="0" allowfullscreen></iframe>`;
+                box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; fullscreen" frameborder="0" allowfullscreen></iframe>`;
                 if(isCh) { let p=0; window.ytT = setInterval(()=>{ if(p<100){p++; updateUI(p)} }, 1000); }
             } else {
                 const v = document.createElement('video'); v.src = url; v.controls = true; v.autoplay = true; v.playsInline = true; box.appendChild(v); vInst = v;

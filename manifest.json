@@ -2,7 +2,7 @@
   "name": "مصحف المروج الذكي",
   "short_name": "المروج",
   "description": "منصة مدرسة المروج لتلاوة القرآن الكريم",
-  "start_url": "index2.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#041a11",
   "theme_color": "#041a11",

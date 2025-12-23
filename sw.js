@@ -1,4 +1,4 @@
-const CACHE_NAME = 'murooj-platform-v2';
+const CACHE_NAME = 'murooj-platform-v3';
 
 // قائمة الملفات التي سيتم حفظها في ذاكرة الجهاز (Offline Assets)
 const assetsToCache = [

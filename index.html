@@ -24,16 +24,9 @@
 
         /* شريط الهوية الوزاري */
         .ministry-bar {
-            background: #fff;
-            padding: 5px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--primary);
-            border-bottom: 1px solid #ddd;
-            border-top: 3px solid var(--accent);
+            background: #fff; padding: 5px 20px; display: flex; justify-content: space-between;
+            align-items: center; font-size: 0.75rem; font-weight: 800; color: var(--primary);
+            border-bottom: 1px solid #ddd; border-top: 3px solid var(--accent);
         }
 
         /* الهيدر */
@@ -66,18 +59,18 @@
         .nav-item i { font-size: 1.3rem; display: block; margin-bottom: 5px; }
         .nav-item span { font-size: 0.75rem; font-weight: 500; }
 
-        /* مشغل الفيديو السينمائي */
+        /* مشغل الفيديو */
         .player-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 10px; backdrop-filter: blur(10px); }
         .cinema-box { width: 100%; max-width: 900px; background: var(--primary); border: 2px solid var(--accent); border-radius: 20px; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.9); }
         .player-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: var(--primary); border-bottom: 1px solid rgba(196,160,77,0.2); }
         .video-container { width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative; }
-        video, iframe { width: 100%; height: 100%; display: block; }
+        video, iframe { width: 100%; height: 100%; display: block; border: none; }
         .close-player-btn { background: var(--gold-gradient); color: #000; border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
 
-        /* المودالز (النوافذ المنبثقة) */
+        /* المودالز */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px; }
         .modal-card { background: var(--primary); border: 2px solid var(--accent); border-radius: 25px; width: 100%; max-width: 450px; padding: 30px; text-align: center; color: #fff; }
-        .grade-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--accent); color: #fff; padding: 12px; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 10px; font-weight: bold; }
+        .grade-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--accent); color: #fff; padding: 12px; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 10px; font-weight: bold; transition: 0.3s; }
         .grade-btn:hover { background: var(--gold-gradient); color: #000; }
         .badge-count { position: absolute; top: 0; right: 35%; background: red; color: white; border-radius: 50%; width: 10px; height: 10px; display: none; }
     </style>
@@ -187,7 +180,7 @@
                 document.getElementById('grade-display').innerText = currentGrade;
                 refreshUI();
                 loadSplashScreen();
-            } catch (e) { console.error("Database Error"); }
+            } catch (e) { console.error("Database Connection Failed"); }
         }
 
         function setGrade(g) {
@@ -209,7 +202,7 @@
             const filtered = surahs.filter(s => s.grade === currentGrade && s.semester == currentSem);
             
             if (filtered.length === 0) {
-                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">لا توجد دروس حالياً.</p>`;
+                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">لا توجد دروس مضافة حالياً لهذا الصف.</p>`;
             } else {
                 container.innerHTML = filtered.map(s => `
                     <div class="surah-card" onclick="playVideo('${s.video_path}', '${s.title}', false)">
@@ -222,18 +215,21 @@
             }
         }
 
-        // المشغل المحسن لروابط الوزارة
+        // المشغل المحسن لمنع تداخل الصوت والروابط المكسورة
         function playVideo(url, title, challengeMode) {
+            // تنظيف أي فيديو سابق فوراً
+            closePlayer();
+
             isChallenge = challengeMode;
             document.getElementById('player-modal').style.display = 'flex';
             document.getElementById('video-title').innerText = title;
             document.getElementById('progress-hud').style.display = challengeMode ? 'block' : 'none';
             
             const box = document.getElementById('video-box');
-            box.innerHTML = "";
+            box.innerHTML = ""; // التأكد من خلو الحاوية
             
             let finalUrl = url.trim();
-            // إضافة خاصية منع الكاش لغير روابط الوزارة فقط لضمان عملها
+            // ذكاء الروابط لضمان عمل فيديوهات الوزارة دوماً
             if (!finalUrl.includes('moe.gov.om')) {
                 finalUrl = finalUrl.includes('?') ? `${finalUrl}&t=${Date.now()}` : `${finalUrl}?t=${Date.now()}`;
             }
@@ -241,7 +237,6 @@
             if(finalUrl.includes('youtube') || finalUrl.includes('youtu.be')) {
                 let id = finalUrl.includes('v=') ? finalUrl.split('v=')[1].split('&')[0] : finalUrl.split('/').pop();
                 box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                if(isChallenge) startFakeProgress();
             } else {
                 const video = document.createElement('video');
                 video.src = finalUrl;
@@ -249,12 +244,10 @@
                 video.autoplay = true;
                 video.playsInline = true;
                 video.style.width = "100%";
+                video.style.height = "100%";
                 
-                // معالجة الخطأ التلقائية
-                video.onerror = () => {
-                    console.error("Video Error - Retrying clean link...");
-                    video.src = url.trim(); 
-                };
+                // خطة بديلة في حال فشل التشفير
+                video.onerror = () => { video.src = url.trim(); };
 
                 box.appendChild(video);
                 videoInstance = video;
@@ -280,20 +273,24 @@
         }
 
         function closePlayer() {
+            const box = document.getElementById('video-box');
+            // إنهاء الفيديو وحذفه من الذاكرة تماماً
             if(videoInstance) {
                 videoInstance.pause();
                 videoInstance.src = "";
-                videoInstance.load();
+                videoInstance.load(); 
                 videoInstance.remove();
+                videoInstance = null;
             }
-            document.getElementById('video-box').innerHTML = "";
+            // مسح أي Iframe لليوتيوب
+            box.innerHTML = "";
             document.getElementById('player-modal').style.display = 'none';
         }
 
         function openPrize() {
             const content = document.getElementById('prize-content');
             if(canWin) {
-                content.innerHTML = `<div style="font-size:4rem;">🏆</div><h2>بطل المروج!</h2><p>استحققت الجائزة لإتمامك التلاوة.</p><button class="grade-btn" onclick="closeModal('modal-prize')">مبارك لك</button>`;
+                content.innerHTML = `<div style="font-size:4rem;">🏆</div><h2>بطل المروج!</h2><p>استحققت الجائزة لإتمامك تلاوة سورة اليوم.</p><button class="grade-btn" onclick="closeModal('modal-prize')">مبارك لك</button>`;
             } else {
                 content.innerHTML = `<div style="font-size:4rem; opacity:0.2;">🔒</div><h2>الجائزة مغلقة</h2><p>أكمل 75% من تحدي اليوم لتفتح الجائزة.</p><button class="grade-btn" onclick="closeModal('modal-prize')">سأفعل ذلك</button>`;
             }
@@ -317,7 +314,7 @@
                         setTimeout(() => splash.style.display = 'none', 800);
                     }
                 }, 2000);
-            } catch (e) { /* No Splash */ }
+            } catch (e) { }
         }
 
         init();

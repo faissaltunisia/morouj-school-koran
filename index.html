@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <link rel="manifest" href="manifest.json">
+<script>
+  if (!sessionStorage.getItem('splashed')) {
+    window.location.href = 'splash.html';
+  }
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة مدرسة المُرُوج الرقمية</title>
@@ -234,5 +240,12 @@
 
         init();
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("تم تسجيل Service Worker بنجاح"))
+      .catch(err => console.log("فشل تسجيل SW:", err));
+  }
+</script>
 </body>
 </html>

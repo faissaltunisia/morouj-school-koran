@@ -242,9 +242,11 @@
     </script>
     <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log("تم تسجيل Service Worker بنجاح"))
-      .catch(err => console.log("فشل تسجيل SW:", err));
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service Worker Failed', err));
+    });
   }
 </script>
 </body>

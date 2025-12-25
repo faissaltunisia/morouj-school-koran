@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة مدرسة المروج - نسخة الهاتف</title>
+    <title>منصة مدرسة المروج - نسخة متوافقة</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;500;700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,6 +19,7 @@
             display: flex; flex-direction: column;
         }
 
+        /* الشريط العلوي */
         .top-banner {
             display: flex; 
             justify-content: space-between; 
@@ -57,15 +58,15 @@
             color: #1a211d;
         }
 
-        /* تعديل الحاوية لتوزيع متباعد ومتساوي */
+        /* الحاوية المركزية */
         .centered-content {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly; /* توزيع الفراغات بالتساوي بين العناصر */
+            justify-content: space-evenly; 
             align-items: center;
             text-align: center;
-            padding: 10px 20px; /* تقليل البادنج لترك مساحة للتوزيع */
+            padding: 10px 20px;
             box-sizing: border-box;
             animation: fadeIn 1.2s ease-out;
         }
@@ -79,6 +80,7 @@
             margin: 0;
         }
 
+        /* تعديل كلمة مبادرة لتنزل لأسفل قليلاً */
         .initiative-highlight {
             font-family: 'Reem Kufi', sans-serif;
             font-size: clamp(3.5rem, 18vw, 4.8rem);
@@ -89,7 +91,8 @@
             -webkit-text-fill-color: transparent;
             animation: shineText 3s linear infinite;
             filter: drop-shadow(0 0 12px rgba(196, 160, 77, 0.4));
-            margin: -15px 0; /* تقريبها من اسم المدرسة رغم التباعد العام */
+            margin-top: 15px; /* إضافة فراغ بينها وبين اسم المدرسة */
+            margin-bottom: 0;
         }
 
         @keyframes shineText { to { background-position: 200% center; } }
@@ -97,7 +100,7 @@
         .platform-info-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
         .platform-title {

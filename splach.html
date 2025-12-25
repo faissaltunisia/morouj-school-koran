@@ -10,7 +10,6 @@
             --accent-gold: #c4a04d; 
             --light-gold: #f1d38e;
             --white: #ffffff;
-            --dark-green: #1a211d;
         }
 
         body, html {
@@ -20,7 +19,6 @@
             display: flex; flex-direction: column;
         }
 
-        /* شريط علوي - توزيع العناصر */
         .top-banner {
             display: flex; 
             justify-content: space-between; 
@@ -41,23 +39,17 @@
             border: 1px solid var(--accent-gold);
         }
 
-        /* صندوق النص الأوسط بتنسيق الصور */
         .middle-text-box {
             background: #fff;
-            color: #333; /* لون نص داكن للوضوح على الخلفية البيضاء */
             padding: 5px 10px;
             border-radius: 10px;
             border: 2px solid var(--accent-gold);
             text-align: center;
             font-weight: 700;
-            font-size: 0.65rem; /* حجم صغير ليتناسب مع الشريط */
+            font-size: 0.65rem;
             line-height: 1.3;
             box-shadow: 0 0 10px rgba(196, 160, 77, 0.4);
-            flex-grow: 0;
             min-width: 160px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
         .middle-text-box span {
@@ -118,12 +110,14 @@
             font-size: 1.2rem;
         }
 
-        .principal-box {
+        /* تنسيق سطر مديرة المدرسة */
+        .principal-line {
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            width: 85%;
-            margin: 15px auto 0 auto;
+            width: 90%;
+            font-size: 1.05rem;
+            white-space: nowrap; /* لضمان بقاء الاسم في سطر واحد */
         }
 
         .loader-bar {
@@ -151,7 +145,7 @@
         <div class="middle-text-box">
             <span>سلطنة عمان</span>
             <span>وزارة التربية والتعليم</span>
-            <span>المديرية العامة لتربية والتعليم بمحافظة ظفار</span>
+            <span>تعليمية ظفار</span>
         </div>
         
         <img src="https://raw.githubusercontent.com/faissaltunisia/morouj-school-koran/main/oman.jpg" alt="Logo 2">
@@ -160,22 +154,22 @@
     <div class="centered-content">
         <p class="school-name">مدرسة المروج للتعليم الأساسي (5-8)</p>
         <h1 class="initiative-highlight">مبادرة</h1>
-        <div class="platform-title">منصة مدرسة المروج </div>
+        <div class="platform-title">منصة مدرسة المروج (11)</div>
         <span class="quran-verse">( حفظ إتقان التلاوة )</span>
         <div style="color: var(--accent-gold); font-size: 0.9rem; margin-bottom: 15px;">الصف الخامس إلى الصف الثاني عشر</div>
 
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 15px;">
             <div style="color: var(--accent-gold); font-size: 0.95rem;">فكرة وإعداد وتنفيذ</div>
             <div class="gold-name">أ. أميرة بنت سعيد الشنفري</div>
             <div style="font-size: 0.85rem; opacity: 0.85;">معلمة التربية الإسلامية</div>
             
-            <div class="principal-box">
-                <div style="font-size: 1.05rem;">مديرة المدرسة: <span class="gold-name">أ. طفول جعبوب</span></div>
+            <div class="principal-line">
+                مديرة المدرسة: <span class="gold-name">أ. طفول محمد جعبوب</span>
             </div>
         </div>
 
         <div class="loader-bar"><div class="loader-fill"></div></div>
-        <div style="font-size: 0.75rem; opacity: 0.5;">العام الدراسي 2025-2026</div>
+        <div style="font-size: 0.75rem; opacity: 0.5;">العام الدراسي 2024-2025</div>
     </div>
 
     <script>
